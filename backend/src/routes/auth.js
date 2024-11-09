@@ -39,7 +39,11 @@ router.post('/register', registerValidation, async (req, res) => {
     await user.save();
 
     const token = jwt.sign(
-      { userId: user._id },
+      {
+        id: user._id,
+        email: user.email,
+        username: user.username,
+      },
       process.env.JWT_SECRET || 'your-secret-key',
       { expiresIn: '7d' }
     );
@@ -72,7 +76,11 @@ router.post('/login', async (req, res) => {
     }
 
     const token = jwt.sign(
-      { userId: user._id },
+      {
+        id: user._id,
+        email: user.email,
+        username: user.username,
+      },
       process.env.JWT_SECRET || 'your-secret-key',
       { expiresIn: '7d' }
     );

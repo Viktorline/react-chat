@@ -1,0 +1,19 @@
+{
+  "semi": true,
+  "jsxSingleQuote": true,
+  "singleQuote": true,
+  "arrowParens": "always",
+  "tabWidth": 2,
+  "plugins": ["@trivago/prettier-plugin-sort-imports"],
+  "importOrder": [
+    "^react$",
+    "<THIRD_PARTY_MODULES>",
+    "^antd/dist/reset.css$",
+    "^.+\\.styles(\\.ts)?$",
+    "^.+\\.css$",
+    "^[./](?!.*types$)",
+    ".*types$"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
+}
