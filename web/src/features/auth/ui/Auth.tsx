@@ -9,10 +9,12 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 import { useFormStore } from '../model/useAuth';
 
 export default function Auth() {
+  const { t } = useTranslation();
   const [isLogin, setIsLogin] = useState(true);
   const {
     email,
@@ -66,14 +68,14 @@ export default function Auth() {
           }}
         >
           <Typography component='h1' variant='h5'>
-            {isLogin ? 'Sign In' : 'Sign Up'}
+            {isLogin ? t('Войти') : t('Зарегистрироваться')}
           </Typography>
           <Box component='form' onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
               margin='normal'
               required
               fullWidth
-              label='Email Address'
+              label={t('Адрес электронной почты')}
               autoComplete='email'
               autoFocus
               value={email}
@@ -84,7 +86,7 @@ export default function Auth() {
                 margin='normal'
                 required
                 fullWidth
-                label='Username'
+                label={t('Имя пользователя')}
                 value={username}
                 onChange={handleUsernameChange}
               />
@@ -93,7 +95,7 @@ export default function Auth() {
               margin='normal'
               required
               fullWidth
-              label='Password'
+              label={t('Пароль')}
               type='password'
               value={password}
               onChange={handlePasswordChange}
@@ -104,7 +106,7 @@ export default function Auth() {
               variant='contained'
               sx={{ mt: 3, mb: 2 }}
             >
-              {isLogin ? 'Sign In' : 'Sign Up'}
+              {isLogin ? t('Войти') : t('Зарегистрироваться')}
             </Button>
             <Link
               component='button'
@@ -112,8 +114,8 @@ export default function Auth() {
               onClick={handleToggleLogin}
             >
               {isLogin
-                ? "Don't have an account? Sign Up"
-                : 'Already have an account? Sign In'}
+                ? t('Нет учетной записи? Зарегистрируйтесь')
+                : t('Уже есть учетная запись? Войти')}
             </Link>
           </Box>
         </Paper>
