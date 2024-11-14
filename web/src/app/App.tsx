@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
-import AuthPage from 'pages/authPage/AuthPage';
+import AuthPage from 'pages/authPage/ui/AuthPage';
 import ChatPage from 'pages/chatPage/ui/ChatPage';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { useAuthStore } from 'shared/auth/model/authStore';

@@ -3,7 +3,12 @@ import { create } from 'zustand';
 
 export interface Chat {
   id: string;
-  participants: string[];
+  participants: Array<{
+    id: string;
+    username: string;
+    avatar?: string;
+    lastSeen?: string;
+  }>;
   lastMessageId: string | null;
   type: 'private' | 'group';
   name?: string;
@@ -14,7 +19,11 @@ export interface Chat {
 export interface Message {
   id: string;
   chatId: string;
-  senderId: string;
+  sender: {
+    id: string;
+    username: string;
+    avatar?: string;
+  };
   content: string;
   readBy: string[];
   createdAt: string;
@@ -72,7 +81,9 @@ export const useChatStore = create<ChatState>((set, get) => ({
       set({ messages: [message, ...messages] });
 
       const updatedChats = chats.map((chat) =>
-        chat.id === currentChat.id ? { ...chat, lastMessage: message } : chat,
+        chat.id === currentChat.id
+          ? { ...chat, lastMessageId: message.id }
+          : chat,
       );
       set({ chats: updatedChats });
     } catch (error) {
