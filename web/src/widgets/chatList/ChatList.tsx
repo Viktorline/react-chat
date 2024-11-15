@@ -5,12 +5,13 @@ import {
   Box,
   Divider,
   List,
-  ListItem,
   ListItemAvatar,
+  ListItemButton,
   ListItemText,
   Typography,
 } from '@mui/material';
 import { useChatStore } from 'features/chat/model/useChatStore';
+import { formatDistanceToNow } from 'shared/utils/formatUtils';
 
 export const ChatList = () => {
   const chatStore = useChatStore();
@@ -30,23 +31,25 @@ export const ChatList = () => {
       }}
     >
       <List sx={{ padding: 0 }}>
-        {/* {chatStore.chats.map((chat) => {
-          const otherParticipant = chat.participants.find(p => p.id !== '1'); 
+        {chatStore.chats.map((chat) => {
+          const otherParticipant = chat.participants.find((p) => p.id !== '1');
+          const lastMessageTime = chat.lastMessage
+            ? formatDistanceToNow(new Date(chat.lastMessage.createdAt))
+            : null;
 
           return (
             <Box key={chat.id}>
-              <ListItem 
-                button
+              <ListItemButton
                 selected={chat.id === chatStore.currentChat?.id}
                 onClick={() => chatStore.setCurrentChat(chat)}
-                sx={{ 
+                sx={{
                   py: 2,
                   '&:hover': {
                     backgroundColor: 'rgba(255, 255, 255, 0.08)',
                   },
                   '&.Mui-selected': {
                     backgroundColor: 'rgba(255, 255, 255, 0.12)',
-                  }
+                  },
                 }}
               >
                 <ListItemAvatar>
@@ -56,14 +59,14 @@ export const ChatList = () => {
                 </ListItemAvatar>
                 <ListItemText
                   primary={
-                    <Typography variant="subtitle1" component="span">
+                    <Typography variant='subtitle1' component='span'>
                       {otherParticipant?.username}
                     </Typography>
                   }
                   secondary={
                     <Typography
-                      variant="body2"
-                      color="text.secondary"
+                      variant='body2'
+                      color='text.secondary'
                       noWrap
                       sx={{ maxWidth: 200 }}
                     >
@@ -71,16 +74,20 @@ export const ChatList = () => {
                     </Typography>
                   }
                 />
-                {chat.lastMessageId && (
-                  <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>
-                    {formatDistanceToNow(new Date(chat.lastMessageId.createdAt), { addSuffix: true })}
+                {lastMessageTime && (
+                  <Typography
+                    variant='caption'
+                    color='text.secondary'
+                    sx={{ ml: 1 }}
+                  >
+                    {lastMessageTime}
                   </Typography>
                 )}
-              </ListItem>
+              </ListItemButton>
               <Divider />
             </Box>
           );
-        })} */}
+        })}
       </List>
     </Box>
   );

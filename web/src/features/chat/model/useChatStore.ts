@@ -9,7 +9,7 @@ export interface Chat {
     avatar?: string;
     lastSeen?: string;
   }>;
-  lastMessageId: string | null;
+  lastMessage: Message | null;
   type: 'private' | 'group';
   name?: string;
   createdAt: string;
@@ -81,9 +81,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
       set({ messages: [message, ...messages] });
 
       const updatedChats = chats.map((chat) =>
-        chat.id === currentChat.id
-          ? { ...chat, lastMessageId: message.id }
-          : chat,
+        chat.id === currentChat.id ? { ...chat, lastMessage: message } : chat,
       );
       set({ chats: updatedChats });
     } catch (error) {
