@@ -1,5 +1,5 @@
-import { create } from 'zustand';
 import { useAuthStore } from 'shared/auth/model/authStore';
+import { create } from 'zustand';
 
 interface IFormState {
   email: string;
@@ -11,7 +11,7 @@ interface IFormState {
   submitForm: (isLogin: boolean) => Promise<void>;
 }
 
-export const useFormStore = create<IFormState>((set, get) => ({
+export const useLoginForm = create<IFormState>((set, get) => ({
   email: '',
   password: '',
   username: '',
@@ -27,7 +27,7 @@ export const useFormStore = create<IFormState>((set, get) => ({
     if (isLogin) {
       await login(email, password);
     } else {
-      await register({email, password, username});
+      await register({ email, password, username });
     }
   },
 }));

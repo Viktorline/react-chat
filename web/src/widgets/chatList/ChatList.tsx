@@ -11,14 +11,21 @@ import {
   Typography,
 } from '@mui/material';
 import { useChatStore } from 'features/chat/model/useChatStore';
+import { useSearch } from 'features/chat/model/useSearch';
+import { Search } from 'shared/ui/Search/Search';
 import { formatDistanceToNow } from 'shared/utils/formatUtils';
 
 export const ChatList = () => {
   const chatStore = useChatStore();
+  const { searchQuery, setSearchQuery, startSearch } = useSearch();
 
   useEffect(() => {
     chatStore.fetchChats();
   }, []);
+
+  const handleSearch = () => {
+    startSearch();
+  };
 
   return (
     <Box
@@ -30,6 +37,11 @@ export const ChatList = () => {
         overflow: 'auto',
       }}
     >
+      <Search
+        value={searchQuery}
+        onChange={setSearchQuery}
+        onSearch={() => console.log('Searching for:', searchQuery)}
+      />
       <List sx={{ padding: 0 }}>
         {chatStore.chats.map((chat) => {
           const otherParticipant = chat.participants.find((p) => p.id !== '1');

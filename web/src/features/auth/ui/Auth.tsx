@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 
-import { useFormStore } from '../model/useAuth';
+import { useLoginForm } from '../model/useLoginForm';
 
 export default function Auth() {
   const { t } = useTranslation();
@@ -24,7 +24,7 @@ export default function Auth() {
     setPassword,
     setUsername,
     submitForm,
-  } = useFormStore();
+  } = useLoginForm();
 
   const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
