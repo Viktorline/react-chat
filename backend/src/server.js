@@ -1,8 +1,13 @@
 const express = require('express');
+
 const mongoose = require('mongoose');
+
 const cors = require('cors');
+
 const authRoutes = require('./routes/auth');
 const chatRoutes = require('./routes/chat');
+const userRoutes = require('./routes/user');
+
 const { createServer } = require('http');
 const { Server } = require('socket.io');
 
@@ -33,6 +38,7 @@ app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/users', userRoutes);
 
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);

@@ -19,4 +19,11 @@ export const chatApi = {
     });
     return data;
   },
+
+  searchUsers: async (query: string) => {
+    const { data } = await api.get(
+      `/users/search?query=${encodeURIComponent(query)}`,
+    );
+    return data;
+  },
 };

@@ -25,8 +25,8 @@ export const useSearch = create<SearchState>((set, get) => ({
     set({ isLoading: true, error: null });
 
     try {
-      // const results = await chatApi.searchChats(searchQuery);
-      // set({ searchResults: results });
+      const results = await chatApi.searchUsers(searchQuery);
+      set({ searchResults: results });
     } catch (err) {
       console.error('Search failed:', err);
       set({ error: 'Failed to fetch search results' });

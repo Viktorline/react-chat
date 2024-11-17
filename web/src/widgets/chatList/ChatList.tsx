@@ -40,7 +40,7 @@ export const ChatList = () => {
       <Search
         value={searchQuery}
         onChange={setSearchQuery}
-        onSearch={() => console.log('Searching for:', searchQuery)}
+        onSearch={handleSearch}
       />
       <List sx={{ padding: 0 }}>
         {chatStore.chats.map((chat) => {
