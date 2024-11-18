@@ -72,6 +72,7 @@ export const useAuthStore = create<IAuthState>((set) => ({
 
   logout: () => {
     localStorage.removeItem('token');
+    window.location.href = '/auth';
     set({
       token: null,
       user: null,

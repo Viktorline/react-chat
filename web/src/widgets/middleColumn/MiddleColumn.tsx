@@ -11,7 +11,7 @@ import {
 import { useChatStore } from 'features/chat/model/useChatStore';
 import { formatDate } from 'shared/utils/formatUtils';
 
-export const MessageList = () => {
+export const MiddleColumn = () => {
   const [message, setMessage] = useState('');
   const chatStore = useChatStore();
 

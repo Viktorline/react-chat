@@ -1,4 +1,5 @@
-import { Box, IconButton, TextField } from '@mui/material';
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
+import { Box, Button, IconButton, TextField } from '@mui/material';
 
 interface SearchProps {
   value: string;
@@ -15,6 +16,7 @@ export const Search = ({ value, onChange, onSearch }: SearchProps) => {
         alignItems: 'center',
         borderBottom: 1,
         borderColor: 'divider',
+        gap: 2,
       }}
     >
       <TextField
@@ -30,9 +32,15 @@ export const Search = ({ value, onChange, onSearch }: SearchProps) => {
           },
         }}
       />
-      <IconButton onClick={onSearch} color='primary' sx={{ ml: 1 }}>
-        иконка
-      </IconButton>
+      <Button
+        onClick={onSearch}
+        variant='contained'
+        color='primary'
+        size='small'
+        sx={{ minWidth: 'auto', padding: '8px' }}
+      >
+        <PersonSearchIcon />
+      </Button>
     </Box>
   );
 };
