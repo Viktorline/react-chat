@@ -1,13 +1,20 @@
+import { ChangeEvent } from 'react';
+
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
-import { Box, Button, IconButton, TextField } from '@mui/material';
+import { Box, Button, TextField } from '@mui/material';
+import { useSearch } from 'features/chat/model/useSearch';
 
-interface SearchProps {
-  value: string;
-  onChange: (value: string) => void;
-  onSearch: () => void;
-}
+export const Search = () => {
+  const { searchQuery, setSearchQuery, startSearch } = useSearch();
 
-export const Search = ({ value, onChange, onSearch }: SearchProps) => {
+  const handleSearch = () => {
+    startSearch();
+  };
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
   return (
     <Box
       sx={{
@@ -23,8 +30,8 @@ export const Search = ({ value, onChange, onSearch }: SearchProps) => {
         fullWidth
         variant='outlined'
         placeholder='Search...'
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
+        value={searchQuery}
+        onChange={handleChange}
         sx={{
           backgroundColor: '#1a1a1a',
           '& .MuiOutlinedInput-root': {
@@ -33,7 +40,7 @@ export const Search = ({ value, onChange, onSearch }: SearchProps) => {
         }}
       />
       <Button
-        onClick={onSearch}
+        onClick={handleSearch}
         variant='contained'
         color='primary'
         size='small'
