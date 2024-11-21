@@ -1,4 +1,5 @@
 import { chatApi } from 'entities/chat/api/chatApi';
+import { useAuthStore } from 'shared/auth/model/authStore';
 import { create } from 'zustand';
 
 interface SearchState {
@@ -22,10 +23,12 @@ export const useSearch = create<SearchState>((set, get) => ({
 
   startSearch: async () => {
     const { searchQuery } = get();
+    const { user } = useAuthStore.getState();
+
     set({ isLoading: true, error: null });
 
     try {
-      const results = await chatApi.searchUsers(searchQuery);
+      const results = await chatApi.searchUsers(searchQuery, user!.id);
       set({ searchResults: results });
       console.log(results);
     } catch (err) {

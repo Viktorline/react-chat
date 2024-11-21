@@ -4,7 +4,7 @@ const User = require('../models/User');
 const router = express.Router();
 
 router.get('/search', async (req, res) => {
-  const { query } = req.query;
+  const { query, excludeId } = req.query;
 
   if (!query) {
     return res.status(400).json({ message: 'Search query is required' });
@@ -13,7 +13,12 @@ router.get('/search', async (req, res) => {
   try {
     const users = await User.find({
       $or: [{ username: { $regex: query, $options: 'i' } }],
+      _id: { $ne: excludeId },
     }).select('-password');
+
+    if (users.length === 0) {
+      return res.status(200).json({ message: 'No users found' });
+    }
 
     res.json(users);
   } catch (error) {

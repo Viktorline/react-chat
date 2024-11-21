@@ -20,10 +20,13 @@ export const chatApi = {
     return data;
   },
 
-  searchUsers: async (query: string) => {
-    const { data } = await api.get(
-      `/users/search?query=${encodeURIComponent(query)}`,
-    );
+  searchUsers: async (query: string, excludeId: string) => {
+    const { data } = await api.get('/users/search', {
+      params: {
+        query: encodeURIComponent(query),
+        excludeId,
+      },
+    });
     return data;
   },
 };
