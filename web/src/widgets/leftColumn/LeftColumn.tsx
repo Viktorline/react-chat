@@ -1,8 +1,12 @@
 import { Box } from '@mui/material';
+import { useSearch } from 'features/chat/model/useSearch';
 import ChatList from 'features/chat/ui/ChatList/ChatList';
 import { LeftHeader } from 'features/chat/ui/LeftHeader/LeftHeader';
+import { UserList } from 'features/search/ui/UserList';
 
 export const LeftColumn = () => {
+  const { searchMode } = useSearch();
+
   return (
     <Box
       sx={{
@@ -14,7 +18,7 @@ export const LeftColumn = () => {
       }}
     >
       <LeftHeader />
-      <ChatList />
+      {searchMode ? <UserList /> : <ChatList />}
     </Box>
   );
 };

@@ -16,10 +16,6 @@ router.get('/search', async (req, res) => {
       _id: { $ne: excludeId },
     }).select('-password');
 
-    if (users.length === 0) {
-      return res.status(200).json({ message: 'No users found' });
-    }
-
     res.json(users);
   } catch (error) {
     console.error('Error searching users:', error);

@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 import ControlPanel from 'features/controlPanel/ui/ControlPanel';
-import { Search } from 'shared/ui/Search/Search';
+import { Search } from 'features/search/ui/Search';
 
 export const LeftHeader = () => {
   return (

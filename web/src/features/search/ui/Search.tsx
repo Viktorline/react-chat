@@ -5,7 +5,8 @@ import { Box, Button, TextField } from '@mui/material';
 import { useSearch } from 'features/chat/model/useSearch';
 
 export const Search = () => {
-  const { searchQuery, setSearchQuery, startSearch } = useSearch();
+  const { searchQuery, setSearchQuery, startSearch, setSearchMode } =
+    useSearch();
 
   const handleSearch = () => {
     startSearch();
@@ -13,6 +14,14 @@ export const Search = () => {
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
+  };
+
+  const handleFocus = () => {
+    setSearchMode(true);
+  };
+
+  const handleBlur = () => {
+    if (!searchQuery) setSearchMode(false);
   };
 
   return (
@@ -32,6 +41,8 @@ export const Search = () => {
         placeholder='Search...'
         value={searchQuery}
         onChange={handleChange}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
         sx={{
           backgroundColor: '#1a1a1a',
           '& .MuiOutlinedInput-root': {

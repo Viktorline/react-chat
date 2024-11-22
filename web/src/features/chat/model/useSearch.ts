@@ -7,15 +7,17 @@ interface SearchState {
   searchResults: any[];
   isLoading: boolean;
   error: string | null;
-
+  searchMode: boolean;
   setSearchQuery: (query: string) => void;
   startSearch: () => Promise<void>;
   clearSearch: () => void;
+  setSearchMode: (mode: boolean) => void;
 }
 
 export const useSearch = create<SearchState>((set, get) => ({
   searchQuery: '',
   searchResults: [],
+  searchMode: false,
   isLoading: false,
   error: null,
 
@@ -38,6 +40,8 @@ export const useSearch = create<SearchState>((set, get) => ({
       set({ isLoading: false });
     }
   },
+
+  setSearchMode: (mode: boolean) => set({ searchMode: mode }),
 
   clearSearch: () => set({ searchQuery: '', searchResults: [] }),
 }));
