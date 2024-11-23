@@ -40,6 +40,7 @@ interface ChatState {
   fetchMessages: (chatId: string) => Promise<void>;
   sendMessage: (content: string) => Promise<void>;
   setCurrentChat: (chat: Chat) => void;
+  createChat: (userId: string) => Promise<void>;
 }
 
 export const useChatStore = create<ChatState>((set, get) => ({
@@ -47,6 +48,23 @@ export const useChatStore = create<ChatState>((set, get) => ({
   currentChat: null,
   messages: [],
   isLoading: false,
+
+  createChat: async (userId) => {
+    set({ isLoading: true });
+    try {
+      const chat = await chatApi.createChat(userId);
+      console.log(chat);
+      set((state) => ({
+        chats: [chat, ...state.chats],
+        currentChat: chat,
+      }));
+      await get().fetchMessages(chat.id);
+    } catch (error) {
+      console.error('Ошибка при создании чата', error);
+    } finally {
+      set({ isLoading: false });
+    }
+  },
 
   fetchChats: async () => {
     set({ isLoading: true });

@@ -2,6 +2,11 @@ import { Chat, Message } from 'features/chat/model/useChatStore';
 import { api } from 'shared/api/axios';
 
 export const chatApi = {
+  createChat: async (userId: string) => {
+    const response = await api.post('/chat/chat', { userId });
+    return response.data;
+  },
+
   getChats: async () => {
     const { data } = await api.get<Chat[]>('/chat/chats');
     return data;
