@@ -13,7 +13,7 @@ router.get('/search', async (req, res) => {
   try {
     const users = await User.find({
       $or: [{ username: { $regex: query, $options: 'i' } }],
-      _id: { $ne: excludeId },
+      id: { $ne: excludeId },
     }).select('-password');
 
     res.json(users);

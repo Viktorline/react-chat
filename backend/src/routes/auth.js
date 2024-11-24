@@ -40,7 +40,7 @@ router.post('/register', registerValidation, async (req, res) => {
 
     const token = jwt.sign(
       {
-        id: user._id,
+        id: user.id,
         email: user.email,
         username: user.username,
       },
@@ -51,7 +51,7 @@ router.post('/register', registerValidation, async (req, res) => {
     res.status(201).json({
       token,
       user: {
-        id: user._id,
+        id: user.id,
         email: user.email,
         username: user.username,
       },
@@ -77,7 +77,7 @@ router.post('/login', async (req, res) => {
 
     const token = jwt.sign(
       {
-        id: user._id,
+        id: user.id,
         email: user.email,
         username: user.username,
       },
@@ -88,7 +88,7 @@ router.post('/login', async (req, res) => {
     res.json({
       token,
       user: {
-        id: user._id,
+        id: user.id,
         email: user.email,
         username: user.username,
       },

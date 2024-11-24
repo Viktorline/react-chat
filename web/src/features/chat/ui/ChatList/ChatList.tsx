@@ -12,11 +12,11 @@ import { useChatStore } from 'features/chat/model/useChatStore';
 import { formatDistanceToNow } from 'shared/utils/formatUtils';
 
 export default function ChatList() {
-  const chatStore = useChatStore();
+  const { chats, currentChat, setCurrentChat } = useChatStore();
 
   return (
     <List sx={{ padding: 0 }}>
-      {chatStore.chats.map((chat) => {
+      {chats.map((chat) => {
         const otherParticipant = chat.participants.find((p) => p.id !== '1');
         const lastMessageTime = chat.lastMessage
           ? formatDistanceToNow(new Date(chat.lastMessage.createdAt))
@@ -25,8 +25,8 @@ export default function ChatList() {
         return (
           <Box key={chat.id}>
             <ListItemButton
-              selected={chat.id === chatStore.currentChat?.id}
-              onClick={() => chatStore.setCurrentChat(chat)}
+              selected={chat.id === currentChat?.id}
+              onClick={() => setCurrentChat(chat)}
               sx={{
                 py: 2,
                 '&:hover': {
