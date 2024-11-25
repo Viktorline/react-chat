@@ -58,6 +58,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
         chats: [chat, ...state.chats],
         currentChat: chat,
       }));
+      await get().fetchChats();
       await get().fetchMessages(chat.id);
     } catch (error) {
       console.error('Ошибка при создании чата', error);

@@ -32,7 +32,6 @@ export const useSearch = create<SearchState>((set, get) => ({
     try {
       const results = await chatApi.searchUsers(searchQuery, user!.id);
       set({ searchResults: results });
-      console.log(results);
     } catch (err) {
       console.error('Search failed:', err);
       set({ error: 'Failed to fetch search results' });

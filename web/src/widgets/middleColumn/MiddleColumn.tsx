@@ -9,14 +9,16 @@ import {
   Typography,
 } from '@mui/material';
 import { useChatStore } from 'features/chat/model/useChatStore';
+import { useAuthStore } from 'shared/auth/model/authStore';
 import { formatDate } from 'shared/utils/formatUtils';
 
 export const MiddleColumn = () => {
   const [message, setMessage] = useState('');
+  const { user } = useAuthStore();
   const chatStore = useChatStore();
 
   const chatUsername = chatStore.currentChat?.participants.find(
-    (p) => p.id !== '1',
+    (p) => p.id !== user?.id,
   )?.username;
 
   const handleSend = () => {
@@ -44,7 +46,7 @@ export const MiddleColumn = () => {
         sx={{
           display: 'flex',
           mb: 2,
-          flexDirection: message.sender.id === '1' ? 'row-reverse' : 'row',
+          flexDirection: message.sender.id === user?.id ? 'row-reverse' : 'row',
         }}
       >
         <Avatar
@@ -52,8 +54,8 @@ export const MiddleColumn = () => {
           sx={{
             width: 32,
             height: 32,
-            mr: message.sender.id === '1' ? 0 : 1,
-            ml: message.sender.id === '1' ? 1 : 0,
+            mr: message.sender.id === user?.id ? 0 : 1,
+            ml: message.sender.id === user?.id ? 1 : 0,
           }}
         >
           {message.sender.username[0].toUpperCase()}
@@ -62,7 +64,8 @@ export const MiddleColumn = () => {
           sx={{
             p: 1,
             maxWidth: '70%',
-            backgroundColor: message.sender.id === '1' ? '#2B5278' : '#212121',
+            backgroundColor:
+              message.sender.id === user?.id ? '#2B5278' : '#212121',
             borderRadius: 2,
           }}
         >

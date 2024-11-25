@@ -9,15 +9,19 @@ import {
   Typography,
 } from '@mui/material';
 import { useChatStore } from 'features/chat/model/useChatStore';
+import { useAuthStore } from 'shared/auth/model/authStore';
 import { formatDistanceToNow } from 'shared/utils/formatUtils';
 
 export default function ChatList() {
   const { chats, currentChat, setCurrentChat } = useChatStore();
+  const { user } = useAuthStore();
 
   return (
     <List sx={{ padding: 0 }}>
       {chats.map((chat) => {
-        const otherParticipant = chat.participants.find((p) => p.id !== '1');
+        const otherParticipant = chat.participants.find(
+          (participant) => participant.id !== user?.id,
+        );
         const lastMessageTime = chat.lastMessage
           ? formatDistanceToNow(new Date(chat.lastMessage.createdAt))
           : null;
@@ -39,7 +43,7 @@ export default function ChatList() {
             >
               <ListItemAvatar>
                 <Avatar src={otherParticipant?.avatar}>
-                  {otherParticipant?.username[0].toUpperCase()}
+                  {/* {otherParticipant?.username[0].toUpperCase()} */}
                 </Avatar>
               </ListItemAvatar>
               <ListItemText
