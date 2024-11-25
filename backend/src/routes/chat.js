@@ -63,23 +63,22 @@ router.post('/chat', auth, async (req, res) => {
 router.post('/message', auth, async (req, res) => {
   try {
     const { chatId, content } = req.body;
-    console.log('req.user:', req.user);
 
-    // const message = new Message({
-    //   chat: chatId,
-    //   sender: req.user.id,
-    //   content,
-    //   readBy: [req.user.id],
-    // });
-    // console.log(message);
+    const message = new Message({
+      chat: chatId,
+      sender: req.user.id,
+      content,
+      readBy: [req.user.id],
+    });
+    console.log(message);
 
-    // await message.save();
+    await message.save();
 
-    // await Chat.findByIdAndUpdate(chatId, {
-    //   lastMessage: message.id,
-    // });
+    await Chat.findByIdAndUpdate(chatId, {
+      lastMessage: message.id,
+    });
 
-    // await message.populate('sender', 'username avatar');
+    await message.populate('sender', 'username avatar');
     res.status(201).json(message);
   } catch (error) {
     console.log(error);
