@@ -4,7 +4,7 @@ import { create } from 'zustand';
 
 interface SearchState {
   searchQuery: string;
-  searchResults: any[];
+  searchResults: any[] | null;
   isLoading: boolean;
   error: string | null;
   searchMode: boolean;
@@ -16,7 +16,7 @@ interface SearchState {
 
 export const useSearch = create<SearchState>((set, get) => ({
   searchQuery: '',
-  searchResults: [],
+  searchResults: null,
   searchMode: false,
   isLoading: false,
   error: null,

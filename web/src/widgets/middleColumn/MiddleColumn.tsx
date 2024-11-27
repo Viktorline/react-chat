@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import SendIcon from '@mui/icons-material/Send';
 import {
   Avatar,
   Box,
@@ -141,7 +142,7 @@ export const MiddleColumn = () => {
           InputProps={{
             endAdornment: (
               <IconButton onClick={handleSend} color='primary'>
-                Иконка
+                <SendIcon />
               </IconButton>
             ),
           }}
