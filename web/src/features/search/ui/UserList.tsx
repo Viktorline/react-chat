@@ -3,7 +3,7 @@ import { useChatStore } from 'features/chat/model/useChatStore';
 import { useSearch } from 'features/chat/model/useSearch';
 
 export const UserList = () => {
-  const { searchResults, isLoading, setSearchMode } = useSearch();
+  const { searchResults, isLoading, setSearchMode, searchMode } = useSearch();
   const { createChat } = useChatStore();
 
   const handleUserClick = (userId: string) => {
@@ -13,6 +13,10 @@ export const UserList = () => {
 
   if (isLoading) {
     return <Box sx={{ p: 2, color: 'white' }}>Loading...</Box>;
+  }
+
+  if (searchMode) {
+    return <Box sx={{ p: 2, color: 'white' }}>Type username to find him.</Box>;
   }
 
   if (!searchResults.length) {
