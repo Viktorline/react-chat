@@ -10,7 +10,7 @@ export const LeftColumn = () => {
   return (
     <Box
       sx={{
-        width: 320,
+        width: 290,
         borderRight: 1,
         borderColor: 'divider',
         backgroundColor: '#212121',

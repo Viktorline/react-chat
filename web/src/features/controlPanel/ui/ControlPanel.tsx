@@ -33,13 +33,10 @@ export default function ControlPanel() {
   return (
     <Box
       sx={{
-        backgroundColor: '#f4f4f4',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRight: '1px solid #ccc',
-        padding: '10px',
       }}
     >
       <Button

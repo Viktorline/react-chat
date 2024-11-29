@@ -7,6 +7,10 @@ export const LeftHeader = () => {
     <Box
       sx={{
         display: 'flex',
+        borderBottom: 1,
+        borderColor: 'divider',
+        padding: 1,
+        gap: 1,
       }}
     >
       <ControlPanel />

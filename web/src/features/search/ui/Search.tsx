@@ -5,8 +5,13 @@ import { Box, Button, TextField } from '@mui/material';
 import { useSearch } from 'features/chat/model/useSearch';
 
 export const Search = () => {
-  const { searchQuery, setSearchQuery, startSearch, setSearchMode } =
-    useSearch();
+  const {
+    searchMode,
+    searchQuery,
+    setSearchQuery,
+    startSearch,
+    setSearchMode,
+  } = useSearch();
 
   const handleSearch = () => {
     startSearch();
@@ -27,19 +32,16 @@ export const Search = () => {
   return (
     <Box
       sx={{
-        p: 2,
         display: 'flex',
         alignItems: 'center',
-        borderBottom: 1,
-        borderColor: 'divider',
         gap: 2,
       }}
     >
       <TextField
         fullWidth
-        variant='outlined'
         placeholder='Search...'
         value={searchQuery}
+        autoComplete='off'
         onChange={handleChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
@@ -47,9 +49,21 @@ export const Search = () => {
           backgroundColor: '#1a1a1a',
           '& .MuiOutlinedInput-root': {
             color: 'white',
+            '& fieldset': {
+              border: 'none',
+            },
+            borderRadius: 100,
+            '&:hover': {
+              boxShadow: searchMode ? '0 0 0 2px blue' : 'none',
+            },
+            '&.Mui-focused': {
+              boxShadow: searchMode ? '0 0 0 2px blue' : 'none',
+            },
           },
+          borderRadius: 100,
         }}
       />
+
       <Button
         onClick={handleSearch}
         variant='contained'
