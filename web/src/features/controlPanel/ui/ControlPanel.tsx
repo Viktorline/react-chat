@@ -1,7 +1,15 @@
 import { useRef, useState } from 'react';
 
 import LogoutIcon from '@mui/icons-material/Logout';
-import { Box, Button, MenuItem, Portal, Typography } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import {
+  Box,
+  Button,
+  IconButton,
+  MenuItem,
+  Portal,
+  Typography,
+} from '@mui/material';
 import { useClickOutside } from 'hooks/useClickOutside';
 import { useAuthStore } from 'shared/auth/model/authStore';
 
@@ -41,13 +49,18 @@ export default function ControlPanel() {
     >
       <Button
         ref={buttonRef}
-        variant='contained'
+        variant='text'
         color='primary'
         onClick={toggleMenu}
         size='small'
-        sx={{ minWidth: 'auto', padding: '8px' }}
+        sx={{
+          minWidth: 'auto',
+          padding: '8px',
+          borderRadius: '100%',
+          backgroundColor: 'none',
+        }}
       >
-        <LogoutIcon />
+        <MenuIcon />
       </Button>
       {isMenuOpen && buttonRef.current && (
         <Portal>
@@ -55,13 +68,15 @@ export default function ControlPanel() {
             ref={menuRef}
             sx={{
               position: 'absolute',
-              top: `${buttonRef.current.getBoundingClientRect().bottom + window.scrollY}px`,
+              top: `${buttonRef.current.getBoundingClientRect().bottom + window.scrollY + 10}px`,
               left: `${buttonRef.current.getBoundingClientRect().left}px`,
 
               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
               borderRadius: '4px',
               zIndex: 1000,
               padding: '10px',
+              backgroundColor: 'rgba(26, 26, 26, 0.7)',
+              backdropFilter: 'blur(5px)',
             }}
           >
             <MenuItem onClick={handleLogout}>

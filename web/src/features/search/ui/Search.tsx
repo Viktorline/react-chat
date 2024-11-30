@@ -1,7 +1,6 @@
 import { ChangeEvent } from 'react';
 
-import PersonSearchIcon from '@mui/icons-material/PersonSearch';
-import { Box, Button, TextField } from '@mui/material';
+import { Box, TextField } from '@mui/material';
 import { useSearch } from 'features/chat/model/useSearch';
 
 export const Search = () => {
@@ -54,25 +53,18 @@ export const Search = () => {
             },
             borderRadius: 100,
             '&:hover': {
-              boxShadow: searchMode ? '0 0 0 2px blue' : 'none',
+              boxShadow: searchMode ? '0 0 0 2px #90CBF8' : 'none',
             },
             '&.Mui-focused': {
-              boxShadow: searchMode ? '0 0 0 2px blue' : 'none',
+              boxShadow: searchMode ? '0 0 0 2px #90CBF8' : 'none',
             },
+          },
+          '& .MuiInputBase-input': {
+            padding: 1,
           },
           borderRadius: 100,
         }}
       />
-
-      <Button
-        onClick={handleSearch}
-        variant='contained'
-        color='primary'
-        size='small'
-        sx={{ minWidth: 'auto', padding: '8px' }}
-      >
-        <PersonSearchIcon />
-      </Button>
     </Box>
   );
 };
