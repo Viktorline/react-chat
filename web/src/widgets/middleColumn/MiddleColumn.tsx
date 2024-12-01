@@ -64,13 +64,16 @@ export const MiddleColumn = () => {
         <Paper
           sx={{
             p: 1,
-            maxWidth: '70%',
+            maxWidth: '300px',
             backgroundColor:
               message.sender.id === user?.id ? '#2B5278' : '#212121',
             borderRadius: 2,
+            wordWrap: 'break-word',
           }}
         >
-          <Typography variant='body1'>{message.content}</Typography>
+          <Typography variant='body1' sx={{ whiteSpace: 'pre-wrap' }}>
+            {message.content}
+          </Typography>
           <Typography variant='caption' color='text.secondary'>
             {formatDate(message.createdAt)}
           </Typography>
