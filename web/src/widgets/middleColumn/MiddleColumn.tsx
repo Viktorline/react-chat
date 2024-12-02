@@ -132,7 +132,15 @@ export const MiddleColumn = () => {
         {renderMessages()}
       </Box>
 
-      <Box sx={{ p: 2, backgroundColor: '#212121' }}>
+      <Box
+        sx={{
+          p: 2,
+          backgroundColor: '#212121',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 1,
+        }}
+      >
         <TextField
           fullWidth
           multiline
@@ -142,19 +150,16 @@ export const MiddleColumn = () => {
           onKeyDown={handleKeyPress}
           placeholder='Write a message...'
           variant='outlined'
-          InputProps={{
-            endAdornment: (
-              <IconButton onClick={handleSend} color='primary'>
-                <SendIcon />
-              </IconButton>
-            ),
-          }}
           sx={{
             '& .MuiOutlinedInput-root': {
               backgroundColor: '#1a1a1a',
+              borderRadius: '16px',
             },
           }}
         />
+        <IconButton onClick={handleSend} color='primary' sx={{ mr: 1 }}>
+          <SendIcon />
+        </IconButton>
       </Box>
     </Box>
   );
