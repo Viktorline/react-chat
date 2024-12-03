@@ -1,17 +1,57 @@
 import { useState } from 'react';
 
+import { LexicalComposer } from '@lexical/react/LexicalComposer';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { ContentEditable } from '@lexical/react/LexicalContentEditable';
+import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
+import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 import SendIcon from '@mui/icons-material/Send';
-import {
-  Avatar,
-  Box,
-  IconButton,
-  Paper,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Avatar, Box, IconButton, Paper, Typography } from '@mui/material';
 import { useChatStore } from 'features/chat/model/useChatStore';
 import { useAuthStore } from 'shared/auth/model/authStore';
 import { formatDate } from 'shared/utils/formatUtils';
+
+const editorConfig = {
+  theme: {
+    paragraph: {
+      margin: 0,
+    },
+  },
+  onError: (error: Error) => {
+    console.error(error);
+  },
+};
+
+const Editor = ({
+  value,
+  setValue,
+}: {
+  value: string;
+  setValue: (value: string) => void;
+}) => {
+  const [editor] = useLexicalComposerContext();
+
+  const handleChange = () => {
+    editor.update(() => {
+      const text = editor
+        .getEditorState()
+        .read(() => editor.getRootElement()?.innerText || '');
+      setValue(text);
+    });
+  };
+
+  return (
+    <>
+      <RichTextPlugin
+        contentEditable={<ContentEditable className='editor-content' />}
+        placeholder={<div style={{ color: '#666' }}>Write a message...</div>}
+        ErrorBoundary={undefined}
+      />
+      <HistoryPlugin />
+      <div className='editor-content' onInput={handleChange} />
+    </>
+  );
+};
 
 export const MiddleColumn = () => {
   const [message, setMessage] = useState('');
@@ -27,17 +67,6 @@ export const MiddleColumn = () => {
       chatStore.sendMessage(message.trim());
       setMessage('');
     }
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
-    }
-  };
-
-  const handleTypeMessage = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMessage(e.target.value);
   };
 
   const renderMessages = () => {
@@ -141,22 +170,9 @@ export const MiddleColumn = () => {
           gap: 1,
         }}
       >
-        <TextField
-          fullWidth
-          multiline
-          maxRows={4}
-          value={message}
-          onChange={handleTypeMessage}
-          onKeyDown={handleKeyPress}
-          placeholder='Write a message...'
-          variant='outlined'
-          sx={{
-            '& .MuiOutlinedInput-root': {
-              backgroundColor: '#1a1a1a',
-              borderRadius: '16px',
-            },
-          }}
-        />
+        <LexicalComposer initialConfig={editorConfig}>
+          <Editor value={message} setValue={setMessage} />
+        </LexicalComposer>
         <IconButton onClick={handleSend} color='primary' sx={{ mr: 1 }}>
           <SendIcon />
         </IconButton>
