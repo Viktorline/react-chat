@@ -1,7 +1,21 @@
-import { useRef, useState } from 'react';
+import {
+  JSXElementConstructor,
+  Key,
+  MouseEventHandler,
+  ReactElement,
+  ReactNode,
+  ReactPortal,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import HelpIcon from '@mui/icons-material/Help';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
+import SettingsIcon from '@mui/icons-material/Settings';
 import {
   Box,
   Button,
@@ -19,17 +33,49 @@ export default function ControlPanel() {
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     logout();
-  };
+  }, [logout]);
 
-  const toggleMenu = () => {
+  const toggleMenu = useCallback(() => {
     setIsMenuOpen((prev) => !prev);
-  };
+  }, []);
 
-  const handleCloseMenu = () => {
+  const handleCloseMenu = useCallback(() => {
     setIsMenuOpen(false);
-  };
+  }, []);
+
+  const handleSettings = useCallback(() => {}, []);
+
+  const toggleTheme = useCallback(() => {}, []);
+
+  const handleHelp = useCallback(() => {}, []);
+
+  const menuItems = useMemo(
+    () => [
+      {
+        label: 'Выйти',
+        icon: <LogoutIcon sx={{ marginRight: '8px' }} />,
+        onClick: handleLogout,
+      },
+      {
+        label: 'Настройки',
+        icon: <SettingsIcon sx={{ marginRight: '8px' }} />,
+        onClick: handleSettings,
+      },
+      {
+        label: 'Темная тема',
+        icon: <DarkModeIcon sx={{ marginRight: '8px' }} />,
+        onClick: toggleTheme,
+      },
+      {
+        label: 'Помощь',
+        icon: <HelpIcon sx={{ marginRight: '8px' }} />,
+        onClick: handleHelp,
+      },
+    ],
+    [handleLogout, handleSettings, toggleTheme, handleHelp],
+  );
 
   useClickOutside({
     ref: menuRef,
@@ -70,7 +116,6 @@ export default function ControlPanel() {
               position: 'absolute',
               top: `${buttonRef.current.getBoundingClientRect().bottom + window.scrollY + 10}px`,
               left: `${buttonRef.current.getBoundingClientRect().left}px`,
-
               boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
               borderRadius: '4px',
               zIndex: 1000,
@@ -79,15 +124,21 @@ export default function ControlPanel() {
               backdropFilter: 'blur(5px)',
             }}
           >
-            <MenuItem onClick={handleLogout}>
-              <LogoutIcon sx={{ marginRight: '8px' }} />
-              Выйти
-            </MenuItem>
-            {[...Array(10)].map((_, index) => (
-              <MenuItem key={index} disabled>
-                <Typography variant='body2'>Заглушка {index + 1}</Typography>
-              </MenuItem>
-            ))}
+            {menuItems.map(
+              (
+                item: {
+                  onClick: MouseEventHandler<HTMLLIElement> | undefined;
+                  icon: any;
+                  label: any;
+                },
+                index: Key | null | undefined,
+              ) => (
+                <MenuItem key={index} onClick={item.onClick}>
+                  {item.icon}
+                  {item.label}
+                </MenuItem>
+              ),
+            )}
           </Box>
         </Portal>
       )}
