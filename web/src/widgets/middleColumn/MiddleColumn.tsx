@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import SendIcon from '@mui/icons-material/Send';
-import { Avatar, Box, IconButton, Paper, Typography } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
 import { useChatStore } from 'features/chat/model/useChatStore';
 import { useAuthStore } from 'shared/auth/model/authStore';
-import { formatDate } from 'shared/utils/formatUtils';
 
+import { MessageComponent } from './Message';
 import TextareaLexical from './TextareaLexical/TextareaLexical';
 
 export const MiddleColumn = () => {
@@ -22,48 +22,6 @@ export const MiddleColumn = () => {
       chatStore.sendMessage(message.trim());
       setMessage('');
     }
-  };
-
-  const renderMessages = () => {
-    return chatStore.messages.map((message) => (
-      <Box
-        key={message.id}
-        sx={{
-          display: 'flex',
-          mb: 2,
-          flexDirection: message.sender.id === user?.id ? 'row-reverse' : 'row',
-        }}
-      >
-        <Avatar
-          src={message.sender.avatar}
-          sx={{
-            width: 32,
-            height: 32,
-            mr: message.sender.id === user?.id ? 0 : 1,
-            ml: message.sender.id === user?.id ? 1 : 0,
-          }}
-        >
-          {message.sender.username[0].toUpperCase()}
-        </Avatar>
-        <Paper
-          sx={{
-            p: 1,
-            maxWidth: '300px',
-            backgroundColor:
-              message.sender.id === user?.id ? '#2B5278' : '#212121',
-            borderRadius: 2,
-            wordWrap: 'break-word',
-          }}
-        >
-          <Typography variant='body1' sx={{ whiteSpace: 'pre-wrap' }}>
-            {message.content}
-          </Typography>
-          <Typography variant='caption' color='text.secondary'>
-            {formatDate(message.createdAt)}
-          </Typography>
-        </Paper>
-      </Box>
-    ));
   };
 
   if (!chatStore.currentChat) {
@@ -113,7 +71,9 @@ export const MiddleColumn = () => {
           flexDirection: 'column-reverse',
         }}
       >
-        {renderMessages()}
+        {chatStore.messages.map((msg) => (
+          <MessageComponent key={msg.id} message={msg} user={user!} />
+        ))}
       </Box>
 
       <Box
