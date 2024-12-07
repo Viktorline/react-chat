@@ -5,7 +5,7 @@ import { Box, IconButton, Typography } from '@mui/material';
 import { useChatStore } from 'features/chat/model/useChatStore';
 import { useAuthStore } from 'shared/auth/model/authStore';
 
-import { MessageComponent } from './Message';
+import { MessageComponent } from './Message/Message';
 import TextareaLexical from './TextareaLexical/TextareaLexical';
 
 export const MiddleColumn = () => {
@@ -85,7 +85,7 @@ export const MiddleColumn = () => {
           gap: 1,
         }}
       >
-        <TextareaLexical value={message} setValue={setMessage} />
+        <TextareaLexical setValue={setMessage} />
         <IconButton onClick={handleSend} color='primary' sx={{ mr: 1 }}>
           <SendIcon />
         </IconButton>

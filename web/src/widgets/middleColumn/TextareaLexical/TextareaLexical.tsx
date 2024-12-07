@@ -1,61 +1,56 @@
+import { useEffect } from 'react';
+
+import { $convertToMarkdownString, TRANSFORMERS } from '@lexical/markdown';
 import { LexicalComposer } from '@lexical/react/LexicalComposer';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { ContentEditable } from '@lexical/react/LexicalContentEditable';
+import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 
 const editorConfig = {
-  theme: {
-    paragraph: {
-      margin: 0,
-    },
+  namespace: 'TextareaLexical',
+  // theme: ChatTheme,
+
+  onError(error: any) {
+    throw error;
   },
-  onError: (error: Error) => {
-    console.error(error);
-  },
+
+  nodes: [],
 };
 
-const Editor = ({
-  value,
+function OnChangePlugin({
   setValue,
 }: {
-  value: string;
-  setValue: (value: string) => void;
-}) => {
+  setValue?: (markdown: string) => void;
+}) {
   const [editor] = useLexicalComposerContext();
 
-  const handleChange = () => {
-    editor.update(() => {
-      const text = editor
-        .getEditorState()
-        .read(() => editor.getRootElement()?.innerText || '');
-      setValue(text);
+  useEffect(() => {
+    return editor.registerUpdateListener(() => {
+      editor.update(() => {
+        const markdown = $convertToMarkdownString([...TRANSFORMERS]);
+        if (setValue) setValue(markdown);
+      });
     });
-  };
+  }, [editor, setValue]);
 
-  return (
-    <>
-      <RichTextPlugin
-        contentEditable={<ContentEditable className='editor-content' />}
-        placeholder={<div style={{ color: '#666' }}>Write a message...</div>}
-        ErrorBoundary={undefined}
-      />
-      <HistoryPlugin />
-      <div className='editor-content' onInput={handleChange} />
-    </>
-  );
-};
+  return null;
+}
 
 const TextareaLexical = ({
-  value,
   setValue,
 }: {
-  value: string;
   setValue: (value: string) => void;
 }) => {
   return (
     <LexicalComposer initialConfig={editorConfig}>
-      <Editor value={value} setValue={setValue} />
+      <RichTextPlugin
+        contentEditable={<ContentEditable spellCheck={false} />}
+        ErrorBoundary={LexicalErrorBoundary}
+      />
+      <OnChangePlugin setValue={setValue} />
+      <HistoryPlugin />
     </LexicalComposer>
   );
 };
