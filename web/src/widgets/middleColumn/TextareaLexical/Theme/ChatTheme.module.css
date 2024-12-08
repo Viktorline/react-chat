@@ -1,0 +1,180 @@
+.editorCode {
+  position: relative;
+  display: block;
+  padding: 0.5rem;
+  padding-left: 2.5rem;
+  border-radius: 0.25rem;
+  background-color: #000;
+  white-space: pre;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #a9b7c6;
+  overflow-x: auto;
+  tab-size: 2;
+}
+
+.editorCode::before {
+  content: attr(data-gutter);
+  position: absolute;
+  left: 0;
+  top: 0;
+  min-width: 25px;
+  padding: 0.5rem;
+  background-color: #000;
+  white-space: pre-wrap;
+  text-align: right;
+  color: #777;
+}
+
+.editorCode::after {
+  content: attr(data-highlight-language);
+  position: absolute;
+  top: 0;
+  right: 3px;
+  padding: 3px;
+  text-transform: uppercase;
+  font-size: 0.625rem;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.tokenComment {
+  color: #708090;
+}
+
+.tokenPunctuation {
+  color: #999;
+}
+
+.tokenProperty {
+  color: #990055;
+}
+
+.tokenSelector {
+  color: #669900;
+}
+
+.tokenOperator {
+  color: #9a6e3a;
+}
+
+.tokenAttr {
+  color: #cc7832;
+}
+
+.tokenVariable {
+  color: #ee9900;
+}
+
+.tokenFunction {
+  color: #ffc66d;
+}
+
+.headingH1,
+.headingH2,
+.headingH3 {
+  margin: 0;
+  padding: 0;
+  font-weight: 900;
+}
+
+.headingH1 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.headingH2 {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.headingH3 {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.paragraph {
+  position: relative;
+  margin-bottom: 0.5rem;
+}
+
+.paragraph:last-child {
+  margin-bottom: 0;
+}
+
+.textBold {
+  font-weight: 900;
+}
+
+.textItalic {
+  font-style: italic;
+}
+
+.textUnderline {
+  text-decoration: underline;
+}
+
+.textStrikethrough {
+  text-decoration: line-through;
+}
+
+.quote {
+  position: relative;
+  width: fit-content;
+  margin-left: 0.625rem;
+}
+
+.quote::before {
+  content: '';
+  position: absolute;
+  left: -0.5rem;
+  height: 100%;
+  width: 0.25rem;
+  border-radius: 0.25rem;
+  background-color: #000;
+}
+
+.link {
+  color: #f59e0b;
+  text-decoration: none;
+}
+
+.textCode {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  border-radius: 0.25rem;
+  background-color: #000;
+  color: #f9fafb;
+}
+
+.channel {
+  padding: 0.25rem;
+  font-weight: 500;
+  color: #f9fafb;
+  border-radius: 0.25rem;
+  background-color: #737373;
+}
+
+.listUl,
+.listOl {
+  margin: 0;
+  padding: 0;
+}
+
+.listUl .listItem,
+.listOl .listItem {
+  margin-bottom: 0.5rem;
+  margin-left: 1.25rem;
+}
+
+.listUl .listItem {
+  list-style-type: disc;
+}
+
+.listOl .listItem {
+  list-style-type: decimal;
+}
+
+.listUl .nestedListItem,
+.listOl .nestedListItem {
+  list-style-type: none;
+}

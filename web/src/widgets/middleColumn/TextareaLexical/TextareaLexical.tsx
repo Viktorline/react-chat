@@ -8,9 +8,11 @@ import LexicalErrorBoundary from '@lexical/react/LexicalErrorBoundary';
 import { HistoryPlugin } from '@lexical/react/LexicalHistoryPlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
 
+import { ChatTheme } from './Theme/ChatTheme';
+
 const editorConfig = {
   namespace: 'TextareaLexical',
-  // theme: ChatTheme,
+  theme: ChatTheme,
 
   onError(error: any) {
     throw error;
