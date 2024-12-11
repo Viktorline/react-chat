@@ -12,6 +12,7 @@ interface IAuthState {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   loadUserFromToken: () => void;
+  deleteUser: () => void;
 }
 
 const decodeAndValidateToken = (token: string): User | null => {
@@ -107,6 +108,35 @@ export const useAuthStore = create<IAuthState>((set) => ({
         user: null,
         isLoading: false,
       });
+    }
+  },
+
+  deleteUser: async () => {
+    const { token, user } = useAuthStore.getState();
+
+    if (!token || !user) {
+      console.error('Невозможно удалить пользователя: отсутствуют данные');
+      return;
+    }
+
+    try {
+      await api.delete(`/auth/user/${user.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      localStorage.removeItem('token');
+      set({
+        token: null,
+        user: null,
+        isLoading: false,
+      });
+
+      window.location.href = '/auth';
+    } catch (error) {
+      console.error('Ошибка при удалении пользователя:', error);
+      throw error;
     }
   },
 }));

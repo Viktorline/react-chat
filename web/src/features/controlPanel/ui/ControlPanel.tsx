@@ -28,7 +28,7 @@ import { useClickOutside } from 'hooks/useClickOutside';
 import { useAuthStore } from 'shared/auth/model/authStore';
 
 export default function ControlPanel() {
-  const { logout } = useAuthStore();
+  const { logout, deleteUser } = useAuthStore();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
   const menuRef = useRef<HTMLDivElement | null>(null);
@@ -44,6 +44,10 @@ export default function ControlPanel() {
   const handleCloseMenu = useCallback(() => {
     setIsMenuOpen(false);
   }, []);
+
+  const handleDeleteUser = useCallback(() => {
+    deleteUser();
+  }, [deleteUser]);
 
   const handleSettings = useCallback(() => {}, []);
 
@@ -72,6 +76,11 @@ export default function ControlPanel() {
         label: 'Помощь',
         icon: <HelpIcon sx={{ marginRight: '8px' }} />,
         onClick: handleHelp,
+      },
+      {
+        label: 'Удалить пользователя',
+        icon: <LogoutIcon sx={{ marginRight: '8px' }} />,
+        onClick: handleDeleteUser,
       },
     ],
     [handleLogout, handleSettings, toggleTheme, handleHelp],
