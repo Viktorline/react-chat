@@ -25,7 +25,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useClickOutside } from 'hooks/useClickOutside';
-import { useAuthStore } from 'shared/auth/model/authStore';
+import { useAuthStore } from 'shared/stores/auth/model/authStore';
 
 export default function ControlPanel() {
   const { logout, deleteUser } = useAuthStore();

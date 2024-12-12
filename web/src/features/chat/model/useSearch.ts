@@ -1,5 +1,5 @@
 import { chatApi } from 'entities/chat/api/chatApi';
-import { useAuthStore } from 'shared/auth/model/authStore';
+import { useAuthStore } from 'shared/stores/auth/model/authStore';
 import { create } from 'zustand';
 
 interface SearchState {

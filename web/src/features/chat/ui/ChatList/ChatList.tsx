@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useChatStore } from 'features/chat/model/useChatStore';
-import { useAuthStore } from 'shared/auth/model/authStore';
+import { useAuthStore } from 'shared/stores/auth/model/authStore';
 import { formatDistanceToNow } from 'shared/utils/formatUtils';
 
 export default function ChatList() {

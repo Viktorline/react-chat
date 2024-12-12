@@ -1,30 +1,30 @@
-import { $createCodeNode, $isCodeNode } from '@lexical/code'
+import { useCallback, useContext, useEffect } from 'react';
+
+import { $createCodeNode, $isCodeNode } from '@lexical/code';
 import {
   $isListNode,
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
-  REMOVE_LIST_COMMAND
-} from '@lexical/list'
-import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext'
+  REMOVE_LIST_COMMAND,
+} from '@lexical/list';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import {
   $createHeadingNode,
   $createQuoteNode,
   $isHeadingNode,
-  $isQuoteNode
-} from '@lexical/rich-text'
-import { $setBlocksType } from '@lexical/selection'
+  $isQuoteNode,
+} from '@lexical/rich-text';
+import { $setBlocksType } from '@lexical/selection';
 import {
   $createParagraphNode,
   $isRangeSelection,
   ElementNode,
   FORMAT_TEXT_COMMAND,
   LexicalNode,
-  RangeSelection
-} from 'lexical'
-import { $getSelection } from 'lexical'
-import { useCallback, useContext, useEffect } from 'react'
-
-import { Context } from '@/store'
+  RangeSelection,
+} from 'lexical';
+import { $getSelection } from 'lexical';
+import { useUserOSStore } from 'shared/stores/userSettings/model/userSettingsStore';
 
 const keyMappings: Record<string, string> = {
   Heading1: '1',
@@ -35,8 +35,8 @@ const keyMappings: Record<string, string> = {
   FormatCode: '6',
   NumberedList: '7',
   BulletList: '8',
-  Strikethrough: '9'
-}
+  Strikethrough: '9',
+};
 
 const keyMappingsMac: Record<string, string> = {
   Heading1: '¡',
@@ -47,83 +47,81 @@ const keyMappingsMac: Record<string, string> = {
   FormatCode: '§',
   NumberedList: '¶',
   BulletList: '•',
-  Strikethrough: 'ª'
-}
+  Strikethrough: 'ª',
+};
 
 type Commands =
   | typeof INSERT_ORDERED_LIST_COMMAND
   | typeof INSERT_UNORDERED_LIST_COMMAND
   | typeof REMOVE_LIST_COMMAND
-  | typeof FORMAT_TEXT_COMMAND
+  | typeof FORMAT_TEXT_COMMAND;
 
 export function CustomShortcutPlugin() {
-  const [editor] = useLexicalComposerContext()
-  const {
-    appStore: { userOs }
-  } = useContext(Context)
+  const [editor] = useLexicalComposerContext();
+  const { userOs } = useUserOSStore();
 
   const executeCommand = useCallback(
     (command: any, value: unknown) => {
       editor.update(() => {
-        const selection = $getSelection()
+        const selection = $getSelection();
         if ($isRangeSelection(selection)) {
-          const anchorNode = selection.anchor.getNode()
-          const focusNode = selection.focus.getNode()
+          const anchorNode = selection.anchor.getNode();
+          const focusNode = selection.focus.getNode();
           const isCurrentNodeHeading = [
             anchorNode.getParent(),
-            focusNode.getParent()
-          ].some(node => {
+            focusNode.getParent(),
+          ].some((node) => {
             if ($isHeadingNode(node)) {
-              const level = parseInt(node.getTag().slice(1), 10)
-              return level >= 1 && level <= 3
+              const level = parseInt(node.getTag().slice(1), 10);
+              return level >= 1 && level <= 3;
             }
-            return false
-          })
+            return false;
+          });
 
           if (!isCurrentNodeHeading) {
-            editor.dispatchCommand(command, value)
+            editor.dispatchCommand(command, value);
           }
         }
-      })
+      });
     },
-    [editor]
-  )
+    [editor],
+  );
 
   const formatBlock = useCallback(
     (
       condition: (selection: RangeSelection) => boolean,
       createNode?: () => ElementNode,
       removeCommand?: Commands,
-      insertCommand?: Commands
+      insertCommand?: Commands,
     ) => {
       editor.update(() => {
-        const selection = $getSelection()
+        const selection = $getSelection();
         if ($isRangeSelection(selection)) {
           if (condition(selection)) {
             removeCommand
               ? editor.dispatchCommand(removeCommand, undefined)
-              : $setBlocksType(selection, () => $createParagraphNode())
+              : $setBlocksType(selection, () => $createParagraphNode());
           } else {
             insertCommand
               ? editor.dispatchCommand(insertCommand, undefined)
-              : createNode && $setBlocksType(selection, createNode)
+              : createNode && $setBlocksType(selection, createNode);
           }
         }
-      })
+      });
     },
-    [editor]
-  )
+    [editor],
+  );
 
   const checkForNodeType = (
     selection: RangeSelection,
     nodeTypeCheck: (node: LexicalNode, type?: string) => boolean,
     nodeType?: string,
-    listType?: string
+    listType?: string,
   ) => {
-    const anchorNode = selection.anchor.getNode()
-    const focusNode = selection.focus.getNode()
-    const anchorParent = anchorNode.getTopLevelElementOrThrow()
-    const focusParent = focusNode.getTopLevelElementOrThrow()
+    const anchorNode = selection.anchor.getNode();
+    const focusNode = selection.focus.getNode();
+    const anchorParent = anchorNode.getTopLevelElementOrThrow();
+    const focusParent = focusNode.getTopLevelElementOrThrow();
 
     if (listType) {
       return (
@@ -131,112 +129,112 @@ export function CustomShortcutPlugin() {
         anchorParent.getListType() === listType &&
         $isListNode(focusParent) &&
         focusParent.getListType() === listType
-      )
+      );
     } else {
       return (
         nodeTypeCheck(anchorNode, nodeType) ||
         (anchorParent && nodeTypeCheck(anchorParent, nodeType)) ||
         nodeTypeCheck(focusNode, nodeType) ||
         (focusParent && nodeTypeCheck(focusParent, nodeType))
-      )
+      );
     }
-  }
+  };
 
   useEffect(() => {
     const keyDownHandler = (event: KeyboardEvent) => {
-      const isMac = userOs === 'Mac'
+      const isMac = userOs === 'Mac';
       const isCorrectModifierPressed = isMac
         ? event.metaKey && event.altKey
-        : event.ctrlKey && event.altKey
+        : event.ctrlKey && event.altKey;
 
-      if (!isCorrectModifierPressed) return
+      if (!isCorrectModifierPressed) return;
 
       const validKeys = isMac
         ? Object.values(keyMappingsMac).concat(Object.values(keyMappings))
-        : Object.values(keyMappings)
+        : Object.values(keyMappings);
 
       if (validKeys.includes(event.key)) {
-        event.preventDefault()
+        event.preventDefault();
         let keyAction =
           Object.keys(keyMappings).find(
-            key => keyMappings[key] === event.key
+            (key) => keyMappings[key] === event.key,
           ) ||
           Object.keys(keyMappingsMac).find(
-            key => keyMappingsMac[key] === event.key
-          )
+            (key) => keyMappingsMac[key] === event.key,
+          );
 
         switch (keyAction) {
           case 'Heading1':
             formatBlock(
-              sel => checkForNodeType(sel, $isHeadingNode, 'h1'),
-              () => $createHeadingNode('h1')
-            )
-            event.preventDefault()
-            break
+              (sel) => checkForNodeType(sel, $isHeadingNode, 'h1'),
+              () => $createHeadingNode('h1'),
+            );
+            event.preventDefault();
+            break;
           case 'Heading2':
             formatBlock(
-              sel => checkForNodeType(sel, $isHeadingNode, 'h2'),
-              () => $createHeadingNode('h2')
-            )
-            event.preventDefault()
-            break
+              (sel) => checkForNodeType(sel, $isHeadingNode, 'h2'),
+              () => $createHeadingNode('h2'),
+            );
+            event.preventDefault();
+            break;
           case 'Heading3':
             formatBlock(
-              sel => checkForNodeType(sel, $isHeadingNode, 'h3'),
-              () => $createHeadingNode('h3')
-            )
-            event.preventDefault()
-            break
+              (sel) => checkForNodeType(sel, $isHeadingNode, 'h3'),
+              () => $createHeadingNode('h3'),
+            );
+            event.preventDefault();
+            break;
           case 'Quote':
             formatBlock(
-              sel => checkForNodeType(sel, $isQuoteNode),
-              $createQuoteNode
-            )
-            event.preventDefault()
-            break
+              (sel) => checkForNodeType(sel, $isQuoteNode),
+              $createQuoteNode,
+            );
+            event.preventDefault();
+            break;
           case 'Code':
             formatBlock(
-              sel => checkForNodeType(sel, $isCodeNode),
-              $createCodeNode
-            )
-            event.preventDefault()
-            break
+              (sel) => checkForNodeType(sel, $isCodeNode),
+              $createCodeNode,
+            );
+            event.preventDefault();
+            break;
           case 'FormatCode':
-            executeCommand(FORMAT_TEXT_COMMAND, 'code')
-            event.preventDefault()
-            break
+            executeCommand(FORMAT_TEXT_COMMAND, 'code');
+            event.preventDefault();
+            break;
           case 'NumberedList':
             formatBlock(
-              sel => checkForNodeType(sel, $isListNode, undefined, 'number'),
+              (sel) => checkForNodeType(sel, $isListNode, undefined, 'number'),
               undefined,
               REMOVE_LIST_COMMAND,
-              INSERT_ORDERED_LIST_COMMAND
-            )
-            event.preventDefault()
-            break
+              INSERT_ORDERED_LIST_COMMAND,
+            );
+            event.preventDefault();
+            break;
           case 'BulletList':
             formatBlock(
-              sel => checkForNodeType(sel, $isListNode, undefined, 'bullet'),
+              (sel) => checkForNodeType(sel, $isListNode, undefined, 'bullet'),
               undefined,
               REMOVE_LIST_COMMAND,
-              INSERT_UNORDERED_LIST_COMMAND
-            )
-            event.preventDefault()
-            break
+              INSERT_UNORDERED_LIST_COMMAND,
+            );
+            event.preventDefault();
+            break;
           case 'Strikethrough':
-            executeCommand(FORMAT_TEXT_COMMAND, 'strikethrough')
-            event.preventDefault()
-            break
+            executeCommand(FORMAT_TEXT_COMMAND, 'strikethrough');
+            event.preventDefault();
+            break;
         }
       }
-    }
+    };
 
-    document.addEventListener('keydown', keyDownHandler)
+    document.addEventListener('keydown', keyDownHandler);
 
     return () => {
-      document.removeEventListener('keydown', keyDownHandler)
-    }
-  }, [formatBlock, executeCommand, userOs])
+      document.removeEventListener('keydown', keyDownHandler);
+    };
+  }, [formatBlock, executeCommand, userOs]);
 
-  return null
+  return null;
 }

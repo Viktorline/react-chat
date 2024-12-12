@@ -3,7 +3,7 @@ import { useState } from 'react';
 import SendIcon from '@mui/icons-material/Send';
 import { Box, IconButton, Typography } from '@mui/material';
 import { useChatStore } from 'features/chat/model/useChatStore';
-import { useAuthStore } from 'shared/auth/model/authStore';
+import { useAuthStore } from 'shared/stores/auth/model/authStore';
 
 import { MessageComponent } from './Message/Message';
 import TextareaLexical from './TextareaLexical/TextareaLexical';

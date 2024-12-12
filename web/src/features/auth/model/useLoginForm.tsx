@@ -1,4 +1,4 @@
-import { useAuthStore } from 'shared/auth/model/authStore';
+import { useAuthStore } from 'shared/stores/auth/model/authStore';
 import { create } from 'zustand';
 
 interface IFormState {
