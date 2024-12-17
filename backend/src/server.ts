@@ -42,7 +42,7 @@ io.on("connection", (socket) => {
     socket.join(chatId);
   });
 
-  socket.on("send_message", (data: { chatId: string, message: string, sender: string }) => {
+  socket.on("send_message", (data: { chatId: string; message: string; sender: string }) => {
     io.to(data.chatId).emit("receive_message", data);
   });
 
