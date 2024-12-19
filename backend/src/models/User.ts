@@ -1,7 +1,16 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+import mongoose, { Document, Schema } from "mongoose";
+import bcrypt from "bcryptjs";
 
-const userSchema = new mongoose.Schema(
+interface IUser extends Document {
+  email: string;
+  password: string;
+  username: string;
+  avatar: string;
+  lastSeen: Date;
+  comparePassword(candidatePassword: string): Promise<boolean>;
+}
+
+const userSchema = new Schema<IUser>(
   {
     email: {
       type: String,
@@ -23,7 +32,7 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type: String,
-      default: '',
+      default: "",
     },
     lastSeen: {
       type: Date,
@@ -35,7 +44,7 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
     toJSON: {
       virtuals: true,
-      transform: (doc, ret) => {
+      transform: (_, ret) => {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
@@ -44,7 +53,7 @@ const userSchema = new mongoose.Schema(
     },
     toObject: {
       virtuals: true,
-      transform: (doc, ret) => {
+      transform: (_, ret) => {
         ret.id = ret._id;
         delete ret._id;
         delete ret.__v;
@@ -54,15 +63,17 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.pre('save', async function (next) {
-  if (this.isModified('password')) {
+userSchema.pre<IUser>("save", async function (next) {
+  if (this.isModified("password")) {
     this.password = await bcrypt.hash(this.password, 10);
   }
   next();
 });
 
-userSchema.methods.comparePassword = async function (candidatePassword) {
+userSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean> {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-module.exports = mongoose.model('User', userSchema);
+const User = mongoose.model<IUser>("User", userSchema);
+
+export default User;
