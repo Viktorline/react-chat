@@ -1,15 +1,25 @@
-const mongoose = require('mongoose');
+import { Schema, model, Document, Types } from "mongoose";
 
-const messageSchema = new mongoose.Schema(
-  {
+interface IMessage extends Document {
+  chat: Types.ObjectId;
+  sender: Types.ObjectId;
+  content: string;
+  readBy: Types.ObjectId[];
+  id?: string; // Виртуальное поле
+}
+
+const messageSchema =
+  new Schema() <
+  IMessage >
+  ({
     chat: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Chat',
+      type: Schema.Types.ObjectId,
+      ref: "Chat",
       required: true,
     },
     sender: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      type: Schema.Types.ObjectId,
+      ref: "User",
       required: true,
     },
     content: {
@@ -18,8 +28,8 @@ const messageSchema = new mongoose.Schema(
     },
     readBy: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        type: Schema.Types.ObjectId,
+        ref: "User",
       },
     ],
   },
@@ -44,7 +54,8 @@ const messageSchema = new mongoose.Schema(
         return ret;
       },
     },
-  }
-);
+  });
 
-module.exports = mongoose.model('Message', messageSchema);
+const Message = model < IMessage > ("Message", messageSchema);
+
+export default Message;
