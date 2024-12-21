@@ -1,26 +1,33 @@
-const mongoose = require('mongoose');
+import { Schema, model, Document, Types } from "mongoose";
 
-const chatSchema = new mongoose.Schema(
+interface IChat extends Document {
+  participants: Types.ObjectId[];
+  lastMessage?: Types.ObjectId;
+  type: "private" | "group";
+  name?: string;
+}
+
+const chatSchema = new Schema()<IChat>(
   {
     participants: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        type: Schema.Types.ObjectId,
+        ref: "User",
       },
     ],
     lastMessage: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Message',
+      type: Schema.Types.ObjectId,
+      ref: "Message",
     },
     type: {
       type: String,
-      enum: ['private', 'group'],
-      default: 'private',
+      enum: ["private", "group"],
+      default: "private",
     },
     name: {
       type: String,
-      required: function () {
-        return this.type === 'group';
+      required: function (this: IChat) {
+        return this.type === "group";
       },
     },
   },
@@ -48,4 +55,6 @@ const chatSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('Chat', chatSchema);
+const Chat = model<IChat>("Chat", chatSchema);
+
+export default Chat;
