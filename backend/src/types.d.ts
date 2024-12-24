@@ -7,3 +7,8 @@ declare module "express-serve-static-core" {
     };
   }
 }
+
+export interface SearchQuery {
+  query: string;
+  excludeId?: string;
+}

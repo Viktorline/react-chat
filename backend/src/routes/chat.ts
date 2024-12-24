@@ -5,20 +5,17 @@ import Message from "../models/Message";
 
 const router = express.Router();
 
-// Тип для аутентифицированного запроса
 interface AuthRequest extends Request {
   user: { id: string };
 }
 
-// Middleware для приведения req к AuthRequest
 const withAuth = (req: Request, res: Response, next: NextFunction) => {
   auth(req, res, () => {
-    (req as AuthRequest).user = (req as any).user; // Приведение типов
+    (req as AuthRequest).user = (req as any).user;
     next();
   });
 };
 
-// Получение всех чатов пользователя
 router.get("/chats", withAuth, async (req: Request, res: Response) => {
   const authReq = req as AuthRequest;
   try {
@@ -35,7 +32,6 @@ router.get("/chats", withAuth, async (req: Request, res: Response) => {
   }
 });
 
-// Получение сообщений для определённого чата
 router.get("/messages/:chatId", withAuth, async (req: Request, res: Response) => {
   const authReq = req as AuthRequest;
   try {
@@ -49,7 +45,6 @@ router.get("/messages/:chatId", withAuth, async (req: Request, res: Response) =>
   }
 });
 
-// Создание приватного чата
 router.post("/chat", withAuth, async (req: Request, res: Response): Promise<void> => {
   const authReq = req as AuthRequest;
   try {
@@ -76,7 +71,7 @@ router.post("/chat", withAuth, async (req: Request, res: Response): Promise<void
     res.status(500).json({ message: "Server error" });
   }
 });
-// Создание сообщения
+
 router.post("/message", withAuth, async (req: Request, res: Response) => {
   const authReq = req as AuthRequest;
   try {

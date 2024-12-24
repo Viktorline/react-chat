@@ -1,27 +1,27 @@
-import express, { Request, Response } from "express";
-import { Model } from "mongoose";
+import express, { Request, Response, NextFunction } from "express";
 import User from "../models/User";
 
 const router = express.Router();
 
-router.get("/search", async (req: Request, res: Response) => {
-  const { query, excludeId } = req.query;
-
-  if (!query || typeof query !== "string") {
-    return res.status(400).json({ message: "Search query is required and must be a string" });
-  }
-
+router.get("/search", (async (req: Request, res: Response, next: NextFunction) => {
   try {
+    const query = req.query.query as string | undefined;
+    const excludeId = req.query.excludeId as string | undefined;
+
+    if (!query || typeof query !== "string") {
+      return res.status(400).json({ message: "Search query is required and must be a string" });
+    }
+
     const users = await User.find({
       $or: [{ username: { $regex: query, $options: "i" } }],
-      _id: { $ne: excludeId },
+      ...(excludeId ? { _id: { $ne: excludeId } } : {}),
     }).select("-password");
 
-    res.json(users);
+    return res.json(users);
   } catch (error) {
     console.error("Error searching users:", error);
-    res.status(500).json({ message: "Internal server error" });
+    next(error);
   }
-});
+}) as express.RequestHandler);
 
 export default router;
