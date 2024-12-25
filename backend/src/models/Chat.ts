@@ -7,7 +7,7 @@ interface IChat extends Document {
   name?: string;
 }
 
-const chatSchema = new Schema()<IChat>(
+const chatSchema = new Schema<IChat>(
   {
     participants: [
       {
