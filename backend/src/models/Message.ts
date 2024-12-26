@@ -5,13 +5,11 @@ interface IMessage extends Document {
   sender: Types.ObjectId;
   content: string;
   readBy: Types.ObjectId[];
-  id?: string; // Виртуальное поле
+  id?: string;
 }
 
-const messageSchema =
-  new Schema() <
-  IMessage >
-  ({
+const messageSchema = new Schema<IMessage>(
+  {
     chat: {
       type: Schema.Types.ObjectId,
       ref: "Chat",
@@ -54,8 +52,9 @@ const messageSchema =
         return ret;
       },
     },
-  });
+  }
+);
 
-const Message = model < IMessage > ("Message", messageSchema);
+const Message = model<IMessage>("Message", messageSchema);
 
 export default Message;
