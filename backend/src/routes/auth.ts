@@ -28,7 +28,7 @@ const registerValidation = [
 ];
 
 // Регистрация пользователя
-router.post("/register", registerValidation, async (req: Request<{}, {}, RegisterRequestBody>, res: Response) => {
+router.post("/register", registerValidation, async (req, res) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
