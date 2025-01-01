@@ -72,18 +72,19 @@ router.post("/register", registerValidation, async (req, res) => {
 });
 
 // Логин пользователя
-router.post("/login", async (req: Request<{}, {}, LoginRequestBody>, res: Response) => {
+router.post("/login", async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      res.status(401).json({ message: "Invalid credentials" });
+      return;
     }
 
     const isValidPassword = await user.comparePassword(password);
     if (!isValidPassword) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      res.status(401).json({ message: "Invalid credentials" });
     }
 
     const token = jwt.sign(
